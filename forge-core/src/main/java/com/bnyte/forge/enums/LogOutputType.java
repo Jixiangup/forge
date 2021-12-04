@@ -16,10 +16,5 @@ public enum LogOutputType {
      * 调用toString输出情趣及响应日志
      */
     TO_STRING,
-
-    /**
-     * 便利对象所有属性输出日志，需要人为提供getter()
-     */
-    EACH,
     ;
 }

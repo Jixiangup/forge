@@ -26,7 +26,7 @@ public @interface APIHelper {
      * 被执行的方法名，默认为当前方法名，如果不为空则使用声明的值
      * @return 方法名
      */
-    String method() default "";
+    String name() default "";
 
     /**
      * 是否打开请求日志输出
@@ -45,5 +45,11 @@ public @interface APIHelper {
      * @return 日志输出方式
      */
     LogOutputType output() default LogOutputType.JSON;
+
+    /**
+     * API执行时长，以毫秒为单位输出在日志中
+     * @return 是否开启API执行时长日志输出
+     */
+    boolean executeTime() default true;
 
 }

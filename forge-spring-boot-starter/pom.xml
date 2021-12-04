@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.bnyte</groupId>
             <artifactId>forge-core</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${forge.version}</version>
         </dependency>
 
 
