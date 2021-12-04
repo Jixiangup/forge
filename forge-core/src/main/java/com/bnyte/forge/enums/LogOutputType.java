@@ -1,4 +1,4 @@
-package forge.enums;
+package com.bnyte.forge.enums;
 
 /**
  * 请求及响应的日志输出方式

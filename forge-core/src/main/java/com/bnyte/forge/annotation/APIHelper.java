@@ -1,4 +1,5 @@
-package forge.annotation;
+package com.bnyte.forge.annotation;
+
 
 import com.bnyte.forge.enums.LogOutputType;
 

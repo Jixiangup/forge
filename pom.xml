@@ -11,11 +11,11 @@
     </modules>
     <groupId>com.bnyte</groupId>
     <artifactId>forge</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-BETA</version>
     <packaging>pom</packaging>
     <description>小而全的工作中常用功能聚合</description>
-    <name>forge</name>
-    <url>https://github.com/bnyte/forge</url>
+    <name>com.bnyte.forge</name>
+    <url>https://github.com/bnyte/com.bnyte.forge</url>
 
     <!-- 开源许可 -->
     <licenses>
@@ -29,12 +29,12 @@
     <!-- issue提交地址 -->
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/bnyte/forge/issues</url>
+        <url>https://github.com/bnyte/com.bnyte.forge/issues</url>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/bnyte/forge</url>
-        <connection>scm:git:https://github.com/bnyte/forge.git</connection>
+        <url>https://github.com/bnyte/com.bnyte.forge</url>
+        <connection>scm:git:https://github.com/bnyte/com.bnyte.forge.git</connection>
         <developerConnection>https://blog.bnyte.com</developerConnection>
         <tag>1.0.0</tag>
     </scm>
@@ -57,6 +57,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot-maven-plugin.version>2.0.1.RELEASE</spring-boot-maven-plugin.version>
         <spring-boot.version>2.5.2</spring-boot.version>
+        <aspectj.vesion>1.9.7</aspectj.vesion>
     </properties>
 
     <build>
@@ -116,8 +117,12 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                        <configuration>
+                            <keyname>0xDE8AA7D3</keyname>
+                        </configuration>
                     </execution>
                 </executions>
+
             </plugin>
 
 
