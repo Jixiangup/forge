@@ -15,8 +15,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -43,6 +48,7 @@ public class APIHelperActuator {
     private String headers;
     private LogOutputType logOutputType;
     private String id;
+    private StringBuilder parameters = new StringBuilder();
 
     /**
      * 切入点
@@ -62,7 +68,7 @@ public class APIHelperActuator {
 
         // 如果该方法并没有Http相关的请求对象则直接自行方法不输出请求和响应日志
         if (this.attributes == null) {
-            log.warn("提醒开发当前API没有HTTP Request对象");
+            log.warn("current invoke method'" + invokeMethod.getName() + "()'not have request bind, This may be an internal call.");
             return point.proceed();
         }
 
@@ -81,16 +87,17 @@ public class APIHelperActuator {
     /**
      * 构建请求日志
      */
-    public String buildRequestLogger() {
+    public String buildRequestLogger() throws IOException {
         StringBuilder logger = new StringBuilder();
         setHeaders();
+        setParameters();
         logger.append("\nRequest\n")
                 .append("\tid: ").append(id).append("\n")
                 .append("\tpath: ").append(request.getRequestURI()).append("\n")
                 .append("\theaders: ").append(headers).append("\n")
                 .append("\ttype: ").append(request.getMethod()).append("\n")
-                .append("\tname: ").append(invokeMethod.getName());
-        // 添加请求参数日志输出
+                .append("\tname: ").append(invokeMethod.getName()).append("\n")
+                .append("\tbody").append(this.parameters);
         return logger.toString();
     }
 
@@ -135,7 +142,7 @@ public class APIHelperActuator {
     /**
      * 输出日志
      */
-    public void outputLogger(HttpSchedule schedule) {
+    public void outputLogger(HttpSchedule schedule) throws IOException {
         // 构建日志
         switch (schedule) {
             case REQUEST:
@@ -217,4 +224,21 @@ public class APIHelperActuator {
         this.logOutputType = logOutputType;
     }
 
+    public void setParameters() throws IOException {
+        Object[] args = point.getArgs();
+        if (args == null || args.length == 0) return;
+        switch (apiHelper.output()) {
+            case TO_STRING:
+                for (int i = 0; i < args.length; i++) {
+                    parameters.append(i+1).append(": ").append(args[i].toString());
+                    if (i < args.length - 1) parameters.append("\n");
+                }
+                break;
+            case JSON:
+
+
+                parameters = new StringBuilder(": " + Objects.requireNonNull(JacksonUtils.toJSONString(args)));
+                break;
+        }
+    }
 }
