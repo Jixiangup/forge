@@ -5,15 +5,15 @@
     <parent>
         <artifactId>forge</artifactId>
         <groupId>com.bnyte</groupId>
-        <version>1.0.2-BETA</version>
+        <version>1.0.3-BETA</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>forge-core</artifactId>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
     <dependencies>
