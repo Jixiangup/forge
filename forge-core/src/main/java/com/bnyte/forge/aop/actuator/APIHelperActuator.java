@@ -33,17 +33,64 @@ public class APIHelperActuator {
 
     private static final Logger log = LoggerFactory.getLogger(APIHelperActuator.class);
 
+    /**
+     * Http请求对象
+     */
     private HttpServletRequest request;
+
+    /**
+     * http响应对象
+     */
     private HttpServletResponse response;
+
+    /**
+     * 被代理方法执行结果
+     */
     private Object result;
+
+    /**
+     * 切入点
+     */
     private ProceedingJoinPoint point;
+
+    /**
+     * 请求执行发起时间
+     */
     private long requestTime;
+
+    /**
+     * Servlet请求属性对象
+     */
     private ServletRequestAttributes attributes;
+
+    /**
+     * 具体被执行的方法啊
+     */
     private Method invokeMethod;
+
+    /**
+     * 方法中的@APIHelper注解
+     */
     private APIHelper apiHelper;
+
+    /**
+     * 请求头
+     */
     private String headers;
+
+    /**
+     * 日志输出类型
+     */
     private LogOutputType logOutputType;
+
+    /**
+     * 本次请求id
+     */
     private String id;
+
+    /**
+     *  body请求参数
+     */
     private StringBuilder parameters = new StringBuilder();
 
     /**
@@ -165,9 +212,11 @@ public class APIHelperActuator {
         id = UUID.randomUUID().toString().replaceAll("-", "");
         setPoint(point);
 
+        // 指定请求对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         setAttributes(attributes);
 
+        // 如果请求对象为空说明是直接内部欧调用则直接执行代理方法并且不执行任何日志输出
         if (this.attributes != null) {
             setRequest(this.attributes.getRequest());
         }
@@ -176,9 +225,11 @@ public class APIHelperActuator {
         Method method = methodSignature.getMethod();
         setInvokeMethod(method);
 
+        // APIHelper注解对象
         APIHelper apiHelper = method.getAnnotation(APIHelper.class);
         setApiHelper(apiHelper);
 
+        // 日志输出类型
         setLogOutputType(apiHelper.output());
     }
 
@@ -193,9 +244,9 @@ public class APIHelperActuator {
     public void setHeaders() {
         Map<String, Object> header = new HashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
-        Iterator<String> headerNameIterator = headerNames.asIterator();
-        while (headerNameIterator.hasNext()) {
-            String headerName = headerNameIterator.next();
+//        Iterator<String> headerNameIterator = headerNames;
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
             header.put(headerName, request.getHeader(headerName));
         }
 
@@ -231,8 +282,6 @@ public class APIHelperActuator {
                 }
                 break;
             case JSON:
-
-
                 parameters = new StringBuilder(": " + Objects.requireNonNull(JacksonUtils.toJSONString(args)));
                 break;
         }
