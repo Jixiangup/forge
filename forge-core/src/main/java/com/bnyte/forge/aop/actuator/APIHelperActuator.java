@@ -124,7 +124,7 @@ public class APIHelperActuator {
         // 设置响应对象并输出日志
         setResponse(attributes.getResponse());
         outputLogger(HttpSchedule.RESPONSE);
-        return point.proceed();
+        return this.result;
     }
 
     /**
