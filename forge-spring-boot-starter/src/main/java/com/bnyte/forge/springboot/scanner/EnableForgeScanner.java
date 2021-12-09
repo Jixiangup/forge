@@ -61,8 +61,8 @@ public class EnableForgeScanner implements BeanFactoryAware, ImportBeanDefinitio
             });
 
             Arrays.stream(annoAttrs.getClassArray("basePackageClasses")).forEach(clazz -> {
-                log.debug("[com.bnyte.forge] enable scanner 'basePackageClasses' to " + clazz.getPackageName());
-                basePackages.add(clazz.getPackageName());
+                log.debug("[com.bnyte.forge] enable scanner 'basePackageClasses' to " + clazz.getPackage().getName());
+                basePackages.add(clazz.getPackage().getName());
             });
 
             Arrays.stream(annoAttrs.getStringArray("defaultPackages")).forEach(pkg -> {
