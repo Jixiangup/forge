@@ -17,7 +17,6 @@
 - gradle
 
 ```
-// https://mvnrepository.com/artifact/com.bnyte/forge-spring-boot-starter
 implementation group: 'com.bnyte', name: 'forge-spring-boot-starter', version: ${latest}
 ```
 
