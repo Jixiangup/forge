@@ -5,6 +5,7 @@
 ## 安装`Forge Spring Boot Starter`
 
 - maven
+
 ```xml
 <dependency>
     <groupId>com.bnyte</groupId>
@@ -13,6 +14,7 @@
 </dependency>
 - ```
 - gradle
+
 ```
 // https://mvnrepository.com/artifact/com.bnyte/forge-spring-boot-starter
 implementation group: 'com.bnyte', name: 'forge-spring-boot-starter', version: ${latest}
