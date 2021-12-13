@@ -4,7 +4,7 @@
 
 ## 安装`Forge Spring Boot Starter`
 
-- `latest` = `1.0.5-BETA`
+- `latest` = `1.0.6-BETA`
 - `latest`表示为推荐使用版本
 
 - maven
@@ -25,7 +25,7 @@ implementation group: 'com.bnyte', name: 'forge-spring-boot-starter', version: $
 
 ## 使用
 
-> 使用的前提是完成了`Forge Spring Boot Starter`的安装, `Forge Spring Boot Starter`完成里一些必要的前置准备，`这是先觉条件`
+> 使用的前提是完成了`Forge Spring Boot Starter`的安装, `Forge Spring Boot Starter`完成了一些必要的前置准备，`这是先觉条件`
 
 ### 使用`API日志管理`
 
@@ -36,12 +36,26 @@ implementation group: 'com.bnyte', name: 'forge-spring-boot-starter', version: $
 @RequestMapping("/start")
 public class StarterController {
 
-    @RequestMapping("/get")
+    // 获取forge构建请求日志对象
+    @Autowired
+    APIHelperActuator apiHelperActuator;
+
+    @RequestMapping("/get/{id}")
     @APIHelper
-    public String get(@RequestParam("username") String username,
+    public Object get(@RequestParam("username") String username,
                       @RequestParam("password") String password,
-                      @RequestBody User user) {
-        return "成功拉";
+                      @RequestBody User user,
+                      @PathVariable("id") String id) {
+        List<String> s = new ArrayList<>();
+        s.add("1");
+        s.add("1");
+        s.add("1");
+        s.add("1");
+        String headers = apiHelperActuator.getHeaders();
+        CurrentPathVariable pathVariable = apiHelperActuator.getPathVariable();
+        CurrentQueryParam queryParam = apiHelperActuator.getQueryParam();
+        CurrentBody body = apiHelperActuator.getBody();
+        return s;
     }
 }
 ```
@@ -49,18 +63,20 @@ public class StarterController {
 
 ```
 Request
-	id: 35e0a678d3104421be48402dcb9bcfbb
-	path: /start/get
-	headers: {"content-length":"62","postman-token":"dd6bc5e0-eea0-4cc7-bc96-cf7139e9a0d4","host":"localhost:8080","content-type":"application/json","connection":"keep-alive","accept-encoding":"gzip, deflate, br","user-agent":"PostmanRuntime/7.28.4","accept":"*/*"}
-	type: POST
+	id: c3ecf5f8956d483d9b74c695c76c1d97
+	path: /start/get/路径id
+	headers: {"content-length":"62","postman-token":"7bbc0c20-f0d6-43d5-8936-e567fe299660","host":"127.0.0.1:8080","content-type":"application/json","connection":"keep-alive","accept-encoding":"gzip, deflate, br","user-agent":"PostmanRuntime/7.28.4","accept":"*/*"}
+	type: DELETE
 	name: get
-	body: ["bnyte","mima",{"username":"username..","password":"password.."}]
-2021-12-09 12:29:47.376  INFO 3339 --- [nio-8080-exec-2] c.b.f.aop.actuator.APIHelperActuator     : 
+	pathVariable: {"id":"路径id"}
+	query: {"password":"mima","username":"bnyte"}
+	body: [{"username":"username..","password":"password.."}]
+2021-12-13 16:01:56.277  INFO 6034 --- [nio-8080-exec-1] c.b.f.aop.actuator.APIHelperActuator     : 
 Response
-	id: 35e0a678d3104421be48402dcb9bcfbb
+	id: c3ecf5f8956d483d9b74c695c76c1d97
 	status: 200
-	body: 成功拉
-	time: 26
+	body: [1, 1, 1, 1]
+	time: 1
 ```
 
 - `@APIHelper`的强大自定义
