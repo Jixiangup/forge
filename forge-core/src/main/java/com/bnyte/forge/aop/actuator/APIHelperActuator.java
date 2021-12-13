@@ -165,7 +165,7 @@ public class APIHelperActuator {
 
         logger.append("\nRequest\n")
                 .append("\tid: ").append(id).append("\n")
-                .append("\tpath: ").append(URLDecoder.decode(request.getRequestURI(), StandardCharsets.UTF_8)).append("\n")
+                .append("\tpath: ").append(URLDecoder.decode(request.getRequestURI(), "UTF-8")).append("\n")
                 .append("\theaders: ").append(headers).append("\n")
                 .append("\ttype: ").append(request.getMethod()).append("\n")
                 .append("\tname: ").append(invokeMethod.getName());
@@ -324,9 +324,8 @@ public class APIHelperActuator {
     public void setHeaders() {
         Map<String, Object> header = new HashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
-        Iterator<String> headerNameIterator = headerNames.asIterator();
-        while (headerNameIterator.hasNext()) {
-            String headerName = headerNameIterator.next();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
             header.put(headerName, request.getHeader(headerName));
         }
 
