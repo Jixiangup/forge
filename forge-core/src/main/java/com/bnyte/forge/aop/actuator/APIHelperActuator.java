@@ -1,11 +1,12 @@
 package com.bnyte.forge.aop.actuator;
 
-import com.bnyte.forge.http.param.CurrentBody;
-import com.bnyte.forge.http.param.CurrentPathVariable;
+import com.bnyte.forge.http.param.ForgeBody;
+import com.bnyte.forge.http.param.ForgeHeader;
+import com.bnyte.forge.http.param.ForgePathVariable;
 import com.bnyte.forge.annotation.APIHelper;
 import com.bnyte.forge.enums.HttpSchedule;
 import com.bnyte.forge.enums.LogOutputType;
-import com.bnyte.forge.http.param.CurrentQueryParam;
+import com.bnyte.forge.http.param.ForgeQueryParam;
 import com.bnyte.forge.util.JacksonUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -28,7 +29,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -87,7 +87,7 @@ public class APIHelperActuator {
      * 请求的请求头
      *  在下一个版本中将更新为map进行存储
      */
-    private String headers;
+    private ForgeHeader headers = new ForgeHeader();
 
     /**
      * 日志输出方式：TO_STRING，JSON
@@ -102,17 +102,17 @@ public class APIHelperActuator {
     /**
      * 路径（URI）参数
      */
-    private CurrentPathVariable pathVariable = new CurrentPathVariable();
+    private ForgePathVariable pathVariable = new ForgePathVariable();
 
     /**
      * 查询参数
      */
-    private CurrentQueryParam queryParam = new CurrentQueryParam();
+    private ForgeQueryParam queryParam = new ForgeQueryParam();
 
     /**
      * body参数
      */
-    private CurrentBody body = new CurrentBody();
+    private ForgeBody body = new ForgeBody();
 
     /**
      * 被执行的目标方法中的参数值（该数组中是真正有值的数组 ）
@@ -150,7 +150,7 @@ public class APIHelperActuator {
         // 设置响应对象并输出日志
         setResponse(attributes.getResponse());
         outputLogger(HttpSchedule.RESPONSE);
-        return point.proceed();
+        return this.result;
     }
 
     /**
@@ -166,7 +166,7 @@ public class APIHelperActuator {
         logger.append("\nRequest\n")
                 .append("\tid: ").append(id).append("\n")
                 .append("\tpath: ").append(URLDecoder.decode(request.getRequestURI(), "UTF-8")).append("\n")
-                .append("\theaders: ").append(headers).append("\n")
+                .append("\theaders: ").append(JacksonUtils.toJSONString(this.headers)).append("\n")
                 .append("\ttype: ").append(request.getMethod()).append("\n")
                 .append("\tname: ").append(invokeMethod.getName());
         if (!this.pathVariable.isEmpty()) {
@@ -223,7 +223,7 @@ public class APIHelperActuator {
         logger.append("\nResponse\n")
                 .append("\tid: ").append(id).append("\n")
                 .append("\tstatus: ").append(response.getStatus()).append("\n")
-                .append("\tbody: ").append(result).append("\n");
+                .append("\tbody: ").append(JacksonUtils.toJSONString(result)).append("\n");
         if (apiHelper.executeTime()) logger.append("\ttime: ").append(System.currentTimeMillis() - requestTime);
         // 添加请求参数日志输出
         return logger.toString();
@@ -308,9 +308,10 @@ public class APIHelperActuator {
     }
 
     private void resetParameters() {
-        this.body = new CurrentBody();
-        this.queryParam = new CurrentQueryParam();
-        this.pathVariable = new CurrentPathVariable();
+        this.body = new ForgeBody();
+        this.queryParam = new ForgeQueryParam();
+        this.pathVariable = new ForgePathVariable();
+        this.headers = new ForgeHeader();
     }
 
     public void setInvokeMethod(Method invokeMethod) {
@@ -322,28 +323,14 @@ public class APIHelperActuator {
     }
 
     public void setHeaders() {
-        Map<String, Object> header = new HashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
-            header.put(headerName, request.getHeader(headerName));
+            headers.put(headerName, request.getHeader(headerName));
         }
-
-        // 获取响应方式
-        switch (logOutputType) {
-            case JSON:
-                headers = JacksonUtils.toJSONString(header);
-                break;
-            case TO_STRING: header.toString();
-                break;
-
-        }
-
-        this.headers = headers;
     }
-
-    public String getHeaders() {
-        return "headers";
+    public ForgeHeader getHeaders() {
+        return this.headers;
     }
 
     public void setLogOutputType(LogOutputType logOutputType) {
@@ -382,10 +369,6 @@ public class APIHelperActuator {
         return apiHelper;
     }
 
-    private void setHeaders(String headers) {
-        this.headers = headers;
-    }
-
     public LogOutputType getLogOutputType() {
         return logOutputType;
     }
@@ -398,27 +381,27 @@ public class APIHelperActuator {
         this.id = id;
     }
 
-    public CurrentPathVariable getPathVariable() {
+    public ForgePathVariable getPathVariable() {
         return pathVariable;
     }
 
-    private void setPathVariable(CurrentPathVariable pathVariable) {
+    private void setPathVariable(ForgePathVariable pathVariable) {
         this.pathVariable = pathVariable;
     }
 
-    public CurrentQueryParam getQueryParam() {
+    public ForgeQueryParam getQueryParam() {
         return queryParam;
     }
 
-    private void setQueryParam(CurrentQueryParam queryParam) {
+    private void setQueryParam(ForgeQueryParam queryParam) {
         this.queryParam = queryParam;
     }
 
-    public CurrentBody getBody() {
+    public ForgeBody getBody() {
         return body;
     }
 
-    private void setBody(CurrentBody body) {
+    private void setBody(ForgeBody body) {
         this.body = body;
     }
 

@@ -4,8 +4,9 @@ import java.util.HashMap;
 
 /**
  * @auther bnyte
- * @date 2021-12-11 19:34
+ * @date 2021-12-11 18:41
  * @email bnytezz@gmail.com
  */
-public class CurrentQueryParam extends HashMap<String, Object> {
+public class ForgePathVariable extends HashMap<String, Object> {
+
 }
