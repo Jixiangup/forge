@@ -150,6 +150,8 @@ public class APIHelperActuator {
         // 设置响应对象并输出日志
         setResponse(attributes.getResponse());
         outputLogger(HttpSchedule.RESPONSE);
+
+        // 在此处目标方法已经执行并且将目标方法执行结果保存到了当前的result属性中，所以直接将该result返回就可以了，如果再次执行point.proceed()会导致目标方法重复执行
         return this.result;
     }
 
