@@ -4,7 +4,7 @@
 
 ## 安装`Forge Spring Boot Starter`
 
-- `latest` = `1.0.6-BETA`
+- `latest` = `1.0.8`
 - `latest`表示为推荐使用版本
 
 - maven
@@ -89,3 +89,23 @@ Response
 | enableResponse | 是否打开响应日志输出 | false | true | 
 | output | 可选值包括：JSON、TO_STRING[需要人为手写toString()，否则输出为对象地址]、each[该方式需要人为提供gather()] | false | JSON |
 | executeTime | 是否开启API执行时长，以毫秒为单位输出在`响应`日志中 | false | true |
+
+# 响应式同意结果集
+
+- 使用`com.bnyte.forge.http.reactive.web.R.ok()`可以直接响应你需要的结果集。
+
+- 响应结果演示
+
+```json
+{
+  "code": 0, 
+  "message": "succeeded",
+  "data": {}
+}
+```
+
+TIPS:
+
+> 如果调用`ok()`那么此时响应业务状态码为`0`，而您需要响应失败结果时只需要调用`error()`就可以了
+>
+> 通常情况下我们会将业务状态码定义为0为成功，-1为失败，而此时如果您需要其他的业务状态码则只需要继续使用对象来进行调用如`R.error().code(10001).message("request error")`;

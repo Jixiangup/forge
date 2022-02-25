@@ -55,6 +55,38 @@ public class R<T> implements Serializable {
     }
 
     /**
+     * 设置响应code
+     * @param code 响应码
+     * @return 响应对象
+     */
+    public R<T> code(Integer code) {
+        this.setCode(code);
+        return this;
+    }
+
+    /**
+     * 设置响应信息
+     * @param message 响应信息
+     * @return 响应对象
+     */
+    public R<T> message(String message) {
+        this.setMessage(message);
+        return this;
+    }
+
+    /**
+     * 同时指定响应码和响应信息
+     * @param code 响应码
+     * @param message 响应信息
+     * @return 响应对象
+     */
+    public R<T> info(Integer code, String message) {
+        this.setCode(code);
+        this.setMessage(message);
+        return this;
+    }
+
+    /**
      * 请求失败
      *  code: -1
      *  message: failed
@@ -63,6 +95,19 @@ public class R<T> implements Serializable {
     public static <T> R<T> error() {
         R<T> r = new R<>();
         r.codeAndMessage(Status.error);
+        return r;
+    }
+
+    /**
+     * 请求失败
+     *  code: -1
+     *  message: failed
+     * @return 链式返回当前响应失败对象
+     */
+    public static <T> R<T> error(T data) {
+        R<T> r = new R<>();
+        r.codeAndMessage(Status.error);
+        r.setData(data);
         return r;
     }
 
@@ -106,7 +151,7 @@ public class R<T> implements Serializable {
         return code;
     }
 
-    public void setCode(Integer code) {
+    private void setCode(Integer code) {
         this.code = code;
     }
 
@@ -114,7 +159,7 @@ public class R<T> implements Serializable {
         return message;
     }
 
-    public void setMessage(String message) {
+    private void setMessage(String message) {
         this.message = message;
     }
 
@@ -122,7 +167,7 @@ public class R<T> implements Serializable {
         return data;
     }
 
-    public void setData(T data) {
+    private void setData(T data) {
         this.data = data;
     }
 
