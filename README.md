@@ -4,7 +4,7 @@
 
 ## 安装`Forge Spring Boot Starter`
 
-- `latest` = `1.0.8`
+- `latest` = `1.0.8.1`
 - `latest`表示为推荐使用版本
 
 - maven
