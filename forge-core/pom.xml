@@ -32,13 +32,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/dm.jdbc.driver/dm7 -->
-        <dependency>
-            <groupId>dm.jdbc.driver</groupId>
-            <artifactId>dm8</artifactId>
-            <version>18.0.0</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
