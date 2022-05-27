@@ -3,10 +3,14 @@ package com.bnyte.forge.http.reactive.web;
 import java.io.Serializable;
 
 /**
+ * web统一响应结果集合
+ *  已经启用该项目, 可以查看 https://github.com/bnyte/xuni
+ *  预计在1.0.9移除改版本
  * @auther bnyte
  * @date 2021-12-09 18:42
  * @email bnytezz@gmail.com
  */
+@Deprecated
 public enum Status implements Serializable {
     ok(0, "succeeded"),
     error(-1, "failed"),

@@ -9,5 +9,5 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface TimeStrapField {
+public @interface TimestampField {
 }

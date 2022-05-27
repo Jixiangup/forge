@@ -7,10 +7,13 @@ import java.util.List;
 
 /**
  * web统一响应结果集合
+ *  已经启用该项目, 可以查看 https://github.com/bnyte/xuni
+ *  预计在1.0.9移除改版本
  * @auther bnyte
  * @date 2021-12-09 18:37
  * @email bnytezz@gmail.com
  */
+@Deprecated
 public class R<T> implements Serializable {
     private static final long serialVersionUID = 94264211209183700L;
 

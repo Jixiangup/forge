@@ -1,7 +1,7 @@
 package com.bnyte.forge.aop.actuator;
 
 import com.bnyte.forge.annotation.EventField;
-import com.bnyte.forge.annotation.TimeStrapField;
+import com.bnyte.forge.annotation.TimestampField;
 import com.bnyte.forge.http.param.ForgeBody;
 import com.bnyte.forge.http.param.ForgeHeader;
 import com.bnyte.forge.http.param.ForgePathVariable;
@@ -182,8 +182,8 @@ public class APIHelperActuator {
                 writeMethod.invoke(this.result, id);
             }
 
-            TimeStrapField timeStrapField = field.getAnnotation(TimeStrapField.class);
-            if (Objects.nonNull(timeStrapField)) {
+            TimestampField timestampField = field.getAnnotation(TimestampField.class);
+            if (Objects.nonNull(timestampField)) {
                 PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.getClass());
                 Method writeMethod = descriptor.getWriteMethod();
                 writeMethod.invoke(this.result, getRequestTime());
