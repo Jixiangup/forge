@@ -1,5 +1,7 @@
 package com.bnyte.forge.aop.actuator;
 
+import com.bnyte.forge.annotation.EventField;
+import com.bnyte.forge.annotation.TimeStrapField;
 import com.bnyte.forge.http.param.ForgeBody;
 import com.bnyte.forge.http.param.ForgeHeader;
 import com.bnyte.forge.http.param.ForgePathVariable;
@@ -25,7 +27,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.URLDecoder;
@@ -147,10 +153,42 @@ public class APIHelperActuator {
         // 执行目标方法
         setResult(point.proceed());
 
+        // 执行完之后自定义业务支持
+        businessProcessing();
+
         outputLogger(HttpSchedule.RESPONSE);
 
         // 在此处目标方法已经执行并且将目标方法执行结果保存到了当前的result属性中，所以直接将该result返回就可以了，如果再次执行point.proceed()会导致目标方法重复执行
         return this.result;
+    }
+
+    private void businessProcessing() {
+        try {
+            writeResponse();
+        } catch (IntrospectionException e) {
+            log.error("[{}] bean info can not found for {}", this.getClass().getSimpleName(), this.result.getClass());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            log.error("[{}] {}", this.getClass().getSimpleName(), e.getMessage(), e);
+        }
+    }
+
+    private void writeResponse() throws IntrospectionException, InvocationTargetException, IllegalAccessException {
+        Field[] fields = this.result.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            EventField eventField = field.getAnnotation(EventField.class);
+            if (Objects.nonNull(eventField)) {
+                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.getClass());
+                Method writeMethod = descriptor.getWriteMethod();
+                writeMethod.invoke(this.result, id);
+            }
+
+            TimeStrapField timeStrapField = field.getAnnotation(TimeStrapField.class);
+            if (Objects.nonNull(timeStrapField)) {
+                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.getClass());
+                Method writeMethod = descriptor.getWriteMethod();
+                writeMethod.invoke(this.result, getRequestTime());
+            }
+        }
     }
 
     /**
