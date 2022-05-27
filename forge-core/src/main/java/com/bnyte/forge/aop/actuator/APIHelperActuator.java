@@ -177,14 +177,14 @@ public class APIHelperActuator {
         for (Field field : fields) {
             EventField eventField = field.getAnnotation(EventField.class);
             if (Objects.nonNull(eventField)) {
-                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.getClass());
+                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.result.getClass());
                 Method writeMethod = descriptor.getWriteMethod();
                 writeMethod.invoke(this.result, id);
             }
 
             TimestampField timestampField = field.getAnnotation(TimestampField.class);
             if (Objects.nonNull(timestampField)) {
-                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.getClass());
+                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.result.getClass());
                 Method writeMethod = descriptor.getWriteMethod();
                 writeMethod.invoke(this.result, getRequestTime());
             }
